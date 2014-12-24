@@ -7,7 +7,7 @@ defmodule KVServer do
     import Supervisor.Spec, warn: false
 
     children = [
-      # Define workers and child supervisors to be supervised
+      supervisor(Task.Supervisor, [[name: KVServer.TaskSupervisor]]),
       worker(Task, [KVServer, :accept, [4040]])
       # worker(KVServer.Worker, [arg1, arg2, arg3])
     ]
@@ -27,7 +27,7 @@ defmodule KVServer do
 
   defp loop_acceptor(socket) do
     {:ok, client} = :gen_tcp.accept(socket)
-    Task.start_link(fn -> serve(client) end)
+    Task.Supervisor.start_child(KVServer.TaskSupervisor, fn -> serve(client) end)
     loop_acceptor(socket)
   end
 
