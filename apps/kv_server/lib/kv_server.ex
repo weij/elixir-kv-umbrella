@@ -27,7 +27,7 @@ defmodule KVServer do
 
   defp loop_acceptor(socket) do
     {:ok, client} = :gen_tcp.accept(socket)
-    serve(client)
+    Task.start_link(fn -> serve(client) end)
     loop_acceptor(socket)
   end
 
