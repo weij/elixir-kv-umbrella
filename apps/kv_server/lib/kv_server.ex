@@ -8,6 +8,7 @@ defmodule KVServer do
 
     children = [
       # Define workers and child supervisors to be supervised
+      worker(Task, [KVServer, :accept, [4040]])
       # worker(KVServer.Worker, [arg1, arg2, arg3])
     ]
 
