@@ -32,16 +32,13 @@ defmodule KVServer do
   end
 
   defp serve(client) do
+    import Pipe
+
     msg = 
-      case read_line(client) do
-        {:ok, data} ->
-          case KVServer.Command.parse(data) do
-            {:ok, command} -> KVServer.Command.run(command)
-            {:error, _} = err ->  err
-          end
-        {:error, _} = err ->
-          err
-      end
+      pipe_matching x, {:ok, x},
+        read_line(client)
+        |> KVServer.Command.parse()
+        |> KVServer.Command.run()
     
     write_line(client, msg)
 
