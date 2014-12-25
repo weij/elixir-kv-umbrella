@@ -38,4 +38,11 @@ Unknown commands or commands with the wrong number of arguments return an error:
     end
   end
   
+  @doc """
+    Runs the given command.
+  """
+  def run(command) do
+    {:ok, "OK\r\n"}
+  end
+  
 end
